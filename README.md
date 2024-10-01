@@ -1,1 +1,1 @@
-#For php projects checkout repository branches
+For php projects checkout master branches
