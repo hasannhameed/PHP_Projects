@@ -14,8 +14,6 @@ if (isset($_POST['update'])) {
   } else {
       die(mysqli_error($conn));
   }
-}else{
-    echo"error";
 }
 
 }catch(Exception $e){
@@ -48,7 +46,7 @@ if (isset($_POST['update'])) {
                 </div>
                 <div class="mb-3">
                   <label  >Enter your Location</label>
-                  <input type="text" required class="form-control" autocomplete="off" name="flocation">
+                  <input type="datetime-local" required class="form-control" autocomplete="off" name="flocation">
                 </div>
                 <button name="update" type="submit" class="btn btn-primary" style="margin-top:1rem;">Update</button>
             </form>

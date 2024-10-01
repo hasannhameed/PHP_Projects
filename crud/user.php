@@ -1,3 +1,4 @@
+
 <?php
 
       include "connect.php";
@@ -14,9 +15,26 @@
               die(mysqli_error($conn));
                 }
           }
+         
       } catch (Exception $e) {
         echo "Error: " . $e->getMessage();
       }
+?>
+<?php
+    //deleting all the data
+    try{
+      
+      if(isset($_GET['delete_all'])){
+        $sql = "DELETE FROM students";
+        if(mysqli_query($conn,$sql)){
+          header("Location:user.php");
+        }else{
+          die(mysqli_error($conn));
+        }
+      }
+    }catch(Exception $e){
+      echo $e->getMessage();
+    }
 ?>
 
 <?php
@@ -53,6 +71,11 @@
 
 ?>
 
+<?php
+//delete all data
+
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -65,25 +88,21 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="container" style="margin:10rem auto; width:60%">
+<div class="container" style="margin:10rem auto;">
   <div class="row">
       <div class="col-lg-6 col-md-6 col-sm-6">
-        <h2 style="margin-bottom:4rem; margin-top:0">Crud application</h2>
-      </div>
-      <div class="col-lg-6 col-md-6 col-sm-6">
-        <!-- Trigger the modal with a button -->
-        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add User</button>
+        <h2 style="margin-bottom:4rem; margin-top:0">Time table application</h2>
+        <button type="button" style="margin-bottom: 2rem;" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add Time Table</button>
       </div>
   </div>
   
-  <table class="table ">
+  <table class="table table-condensed ">
     <thead>
        <tr>
-          <th>id</th>
-          <th>Name</th>
-          <th>Location</th>
-          <th></th>
-          <th></th>
+          <th>S.NO</th>
+          <th>WORK NAME</th>
+          <th>DATE&TIME</th>
+          <th>ACTION</th>
        </tr>
     </thead>
     <?php  if($result->num_rows>0){  ?>
@@ -94,7 +113,7 @@
                   <td><?php echo $row['name'] ?></td>
                   <td><?php echo $row['location'] ?></td>
                   <td>
-                    <a href="http://localhost/crud/user.php?delete_id=<?php echo $row['id'] ?>" name="submit-1" type="submit"  class="btn btn-danger">Delete</a>
+                    <a href="user.php?delete_id=<?php echo $row['id'] ?>" name="submit-1" type="submit"  class="btn btn-danger">Delete</a>
                   </td> 
                   <td>
                     <a class="btn btn-success" href="update.php?delete_id-2=<?php echo $row['id'] ?>">Update</a>
@@ -108,7 +127,7 @@
          </tr>
     <?php }?>
   </table>
-  
+  <a href="user.php?delete_all=1"  class="btn btn-danger btn-lg">DELETE ALL RECORDS</a>
 
   <!-- Modal for INSERT-->
   <div class="modal fade" id="myModal" role="dialog">
@@ -123,13 +142,13 @@
         <div class="modal-body">
           <form method="POST">
                 <div class="mb-3">
-                  <label  class="form-label">Enter your name</label>
+                  <label  class="form-label">Enter your Work</label>
                   <input type="text" required class="form-control" autocomplete="off" name="fname">
 
                 </div>
                 <div class="mb-3">
-                  <label  >Enter your Location</label>
-                  <input type="text" required class="form-control" autocomplete="off" name="flocation">
+                  <label  >Enter your DATE&TIME</label>
+                  <input type="datetime-local" required class="form-control" autocomplete="off" name="flocation">
                 </div>
               
                 <button name="submit" type="submit" class="btn btn-primary" style="margin-top:1rem;">Submit</button>
@@ -142,8 +161,6 @@
       
     </div>
   </div>
-
-  
 </div>
 
 </body>
