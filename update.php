@@ -10,7 +10,7 @@ if (isset($_POST['update'])) {
   $sql = "UPDATE students SET name='$namee', location='$location' WHERE id=$id";
   $result = mysqli_query($conn, $sql);
   if ($result) {
-    header("Location:user.php");
+      header("Location:user.php");
   } else {
       die(mysqli_error($conn));
   }
