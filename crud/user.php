@@ -5,11 +5,19 @@
       //inserting data
       try {
           if (isset($_POST['submit'])) {
+            $file = $_FILES['image']['tmp_name'];
+            $targetDir = 'uploads/';
+            $targetFile = $targetDir . basename($_FILES["image"]["name"]);
+              if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
+               // echo "The file " . htmlspecialchars(basename($_FILES["image"]["name"])) . " has been uploaded.";
+            } else {
+                echo "Sorry, there was an error uploading your file.";
+            }
             $namee = $_POST["fname"];
             $location = $_POST["flocation"];
             $namee = mysqli_real_escape_string($conn, $namee);
             $location = mysqli_real_escape_string($conn, $location);
-            $sql = "INSERT INTO students (id, name, location) VALUES (NULL, '$namee', '$location')";
+            $sql = "INSERT INTO students (id, name, location,img_url) VALUES (NULL, '$namee', '$location','$targetFile')";
             $result = mysqli_query($conn, $sql);
             if (!$result) {
               die(mysqli_error($conn));
@@ -86,6 +94,14 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+    .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+        padding: 5px;
+        line-height: 1.42857143;
+        vertical-align: middle;
+        border-top: 1px solid #ddd;
+    }
+  </style>
 </head>
 <body>
 <div class="container" style="margin:10rem auto;">
@@ -100,8 +116,9 @@
     <thead>
        <tr>
           <th>S.NO</th>
-          <th>WORK NAME</th>
+          <th>WORK</th>
           <th>DATE&TIME</th>
+          <th>IMAGE</th>
           <th>ACTION</th>
        </tr>
     </thead>
@@ -112,12 +129,11 @@
                   <td><?php echo $row['id'] ?></td>
                   <td><?php echo $row['name'] ?></td>
                   <td><?php echo $row['location'] ?></td>
+                  <td><img src="<?php echo $row['img_url'] ?>" style="width:50px" alt="img"></td>
                   <td>
-                    <a href="user.php?delete_id=<?php echo $row['id'] ?>" name="submit-1" type="submit"  class="btn btn-danger">Delete</a>
-                  </td> 
-                  <td>
+                    <a href="user.php?delete_id=<?php echo $row['id'] ?>" name="submit-1" type="submit" style="padding: 6px 14.5px;margin-bottom:2px;"  class="btn btn-danger">Delete</a>
                     <a class="btn btn-success" href="update.php?delete_id-2=<?php echo $row['id'] ?>">Update</a>
-                  </td>
+                  </td> 
                 </tr>
           </tbody>
           <?php }?>
@@ -140,7 +156,7 @@
           <h4 class="modal-title">Add user</h4>
         </div>
         <div class="modal-body">
-          <form method="POST">
+          <form method="POST" enctype="multipart/form-data">
                 <div class="mb-3">
                   <label  class="form-label">Enter your Work</label>
                   <input type="text" required class="form-control" autocomplete="off" name="fname">
@@ -150,12 +166,16 @@
                   <label  >Enter your DATE&TIME</label>
                   <input type="datetime-local" required class="form-control" autocomplete="off" name="flocation">
                 </div>
+                <div class="mb-3">
+                  <label  >Upload Image</label>
+                  <input type="file"  class="form-control"  name="image">
+                </div>
               
                 <button name="submit" type="submit" class="btn btn-primary" style="margin-top:1rem;">Submit</button>
             </form>
         </div>
         <div class="modal-footer ">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button  type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
       
@@ -165,4 +185,5 @@
 
 </body>
 </html>
+
 
